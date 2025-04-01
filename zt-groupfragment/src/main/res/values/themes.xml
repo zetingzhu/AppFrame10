@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.AppFrame10" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="Theme.Act" parent="Theme.AppCompat.NoActionBar" />
+
+    <style name="ThemeOverlay.AppFrame10.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
+</resources>

@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebView File Input</title>
+</head>
+<body>
+<input type="file" id="fileInput">
+<div id="fileInfo"></div>
+
+<script type="text/javascript">
+    console.log("zzt is running");
+
+   const fileInput = document.getElementById('fileInput');
+   const fileInfoDiv = document.getElementById('fileInfo');
+
+ console.log("zzt is running" + fileInput + " " + fileInfoDiv);
+
+   fileInput.addEventListener('change', function() {
+
+
+    console.log("zzt 1111");
+
+       fileInfoDiv.innerHTML = ''; // 清空之前的信息
+       const files = this.files;
+
+       if (files.length > 0) {
+           console.log("Selected files:", files);
+           for (let i = 0; i < files.length; i++) {
+               const file = files[i];
+               const info = `文件名: ${file.name}<br>文件大小: ${file.size} 字节<br>文件类型: ${file.type}<br>`;
+               fileInfoDiv.innerHTML += info;
+
+               // 注意：这里无法直接获取文件的真实路径，
+               // 'file' 对象包含的是文件的一些元数据。
+               // 如果你需要上传文件内容或获取更多信息，
+               // 你可能需要使用 JavaScript 的 FileReader API。
+
+               // 示例：读取文件内容 (谨慎使用，大文件可能会阻塞 UI)
+               /*
+               const reader = new FileReader();
+               reader.onload = function(event) {
+                   console.log("File content (Data URL):", event.target.result);
+                   // 你可以将 event.target.result 发送到服务器
+               };
+               reader.readAsDataURL(file); // 或者 reader.readAsText(file) 等
+               */
+           }
+       } else {
+           fileInfoDiv.innerText = '没有选择任何文件。';
+       }
+   });
+</script>
+
+
+</body>
+</html>

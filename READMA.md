@@ -62,4 +62,8 @@ https://github.com/getActivity/Toaster
 [zt-loadfiledirimage](zt-loadfiledirimage)
 
 
- 
+各种获取设备id，测试
+[zt-deviceid](zt-deviceid)
+
+Fragment 分组显示，双击可以返回最下方
+[zt-groupfragment](zt-groupfragment) 
