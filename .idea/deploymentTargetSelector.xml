@@ -34,6 +34,9 @@
       <SelectionState runConfigName="zt-groupfragment">
         <option name="selectionMode" value="DROPDOWN" />
       </SelectionState>
+      <SelectionState runConfigName="zt-downtosecondview">
+        <option name="selectionMode" value="DROPDOWN" />
+      </SelectionState>
     </selectionStates>
   </component>
 </project>
