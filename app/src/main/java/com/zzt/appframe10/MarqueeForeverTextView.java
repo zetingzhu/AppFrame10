@@ -49,6 +49,11 @@ public class MarqueeForeverTextView extends AppCompatTextView {
 
     public MarqueeForeverTextView(@NonNull Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        initView(context);
+    }
+
+    private void initView(Context context) {
+//        setTextDirection(TEXT_DIRECTION_FIRST_STRONG_RTL);
     }
 
     @Override

@@ -1,10 +1,13 @@
 package com.zzt.zt_groupfragment.frag
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.zzt.zt_groupfragment.act.ActTabV2
 import com.zzt.zt_groupfragment.databinding.FragmentAddBinding
 import com.zzt.zt_groupfragment.util.ColorUtils
@@ -22,7 +25,7 @@ private const val ARG_PARAM2 = "param2"
  * create an instance of this fragment.
  */
 class AddFragment : Fragment() {
-    // TODO: Rename and change types of parameters
+    val TAG = AddFragment::class.java.simpleName
     private var param1: String? = null
     private var param2: String? = null
     var binding: FragmentAddBinding? = null
@@ -42,6 +45,37 @@ class AddFragment : Fragment() {
         // Inflate the layout for this fragment
 //        return inflater.inflate(R.layout.fragment_add, container, false)
         binding = FragmentAddBinding.inflate(inflater, container, false)
+        viewLifecycleOwner.lifecycle.addObserver(object : DefaultLifecycleObserver {
+            override fun onResume(owner: LifecycleOwner) {
+                super.onResume(owner)
+                Log.i(TAG, "生命周期 ${param1 + param2} onResume")
+            }
+
+            override fun onPause(owner: LifecycleOwner) {
+                super.onPause(owner)
+                Log.i(TAG, "生命周期 ${param1 + param2} onPause")
+            }
+
+            override fun onStart(owner: LifecycleOwner) {
+                super.onStart(owner)
+                Log.i(TAG, "生命周期 ${param1 + param2} onStart")
+            }
+
+            override fun onStop(owner: LifecycleOwner) {
+                super.onStop(owner)
+                Log.i(TAG, "生命周期 ${param1 + param2} onStop")
+            }
+
+            override fun onCreate(owner: LifecycleOwner) {
+                super.onCreate(owner)
+                Log.i(TAG, "生命周期 ${param1 + param2} onCreate")
+            }
+
+            override fun onDestroy(owner: LifecycleOwner) {
+                super.onDestroy(owner)
+                Log.i(TAG, "生命周期 ${param1 + param2} onDestroy")
+            }
+        });
         return binding?.root
     }
 
@@ -60,6 +94,11 @@ class AddFragment : Fragment() {
                 (activity as? ActTabV2)?.addFragment(newFrag)
             }
         }
+
+        binding?.btnBack?.setOnClickListener {
+            (activity as? ActTabV2)?.backFragment( )
+        }
+
     }
 
     companion object {

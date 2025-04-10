@@ -43,7 +43,8 @@ app
 * Markdown 语法文档：[MarkdownDoc](https://github.com/getActivity/MarkdownDoc) ![](https://img.shields.io/github/stars/getActivity/MarkdownDoc.svg) ![](https://img.shields.io/github/forks/getActivity/MarkdownDoc.svg)
 
 
-
+[app](app)
+里面有各种跑马灯效果
 
 Toaster 吐司框架
 https://github.com/getActivity/Toaster

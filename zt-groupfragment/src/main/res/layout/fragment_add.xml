@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_ffffff_or_101010"
     tools:context=".frag.AddFragment">
 
     <TextView
@@ -23,4 +24,12 @@
         android:layout_marginBottom="64dp"
         android:text="添加页面" />
 
+    <Button
+        android:id="@+id/btn_back"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="48dp"
+        android:layout_marginBottom="64dp"
+        android:text="退出当前页面" />
 </FrameLayout>

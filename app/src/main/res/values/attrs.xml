@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MarqueeTextViewV3">
+        <attr name="marqueeMode" format="enum">
+            <enum name="whenFocused" value="0" />
+            <enum name="always" value="1" />
+        </attr>
+        <attr name="scrollSpeedFactor" format="float" />
+        <attr name="restartDelay" format="integer" />
+    </declare-styleable>
+</resources>

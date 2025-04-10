@@ -3,11 +3,14 @@ package com.zzt.zt_groupfragment.frag
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.DefaultLifecycleObserver
+import androidx.lifecycle.LifecycleOwner
 import com.zzt.zt_groupfragment.act.ActTabV2
 import com.zzt.zt_groupfragment.databinding.FragmentLoginBinding
 import com.zzt.zt_groupfragment.util.TimeUtils
@@ -23,6 +26,7 @@ class LoginFragment : Fragment() {
         }
     }
 
+    val TAG = LoginFragment::class.java.simpleName
     private var _binding: FragmentLoginBinding? = null
 
     private val binding get() = _binding!!
@@ -80,5 +84,26 @@ class LoginFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(TAG, "生命周期 Activity onResume")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        Log.d(TAG, "生命周期 Activity onPause")
+    }
+
+    override fun onStart() {
+        super.onStart()
+        Log.d(TAG, "生命周期 Activity onStart")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        Log.d(TAG, "生命周期 Activity onStop")
     }
 }

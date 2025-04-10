@@ -38,8 +38,70 @@
             android:gravity="center_vertical"
             android:singleLine="true"
             android:textColor="@color/white"
+            android:textDirection="ltr"
             android:textSize="14sp" />
 
     </LinearLayout>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="32dp"
+        android:layout_marginTop="30dp"
+        android:background="@color/color_46403D"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.zzt.appframe10.MarqueeForeverTextView
+            android:id="@+id/tv_marquee2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/color_46403D"
+            android:ellipsize="none"
+            android:gravity="center_vertical|left"
+            android:singleLine="true"
+            android:textColor="@color/white"
+            android:textSize="14sp" />
+
+    </RelativeLayout>
+
+    <com.zzt.appframe10.MarqueeTextViewV3
+        android:id="@+id/tv_marquee3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"
+        android:text="短文案"
+        app:marqueeMode="always"
+        app:restartDelay="2000"
+        app:scrollSpeedFactor="0.05" />
+
+
+    <com.zzt.appframe10.MarqueeTextViewV4
+        android:id="@+id/tv_marquee4"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp" />
+
+
+    <com.zzt.appframe10.MarqueeTextViewV5
+        android:id="@+id/tv_marquee5"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:padding="10dp" />
+
+    <com.zzt.appframe10.MarqueeTextViewV6
+        android:id="@+id/tv_marquee6"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="30dp"
+        android:ellipsize="none"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:singleLine="true"
+        android:text="这是一段需要跑马灯效果的文字，即使很短也会滚动起来"
+        android:textColor="@android:color/black"
+        android:textSize="20sp" />
 </LinearLayout>

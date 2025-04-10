@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_ffffff_or_101010"
     android:orientation="vertical">
 
     <LinearLayout
@@ -13,19 +14,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Messages" />
+            android:text="Messages"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Your signature" />
+            android:text="Your signature"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Default reply action" />
+            android:text="Default reply action"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
 
     </LinearLayout>
 
@@ -38,19 +42,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="50dp"
-            android:text="Messages" />
+            android:text="Messages"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Your signature" />
+            android:text="Your signature"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="20dp"
-            android:text="Default reply action" />
+            android:text="Default reply action"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
 
     </LinearLayout>
 
@@ -65,6 +72,16 @@
         android:text="添加页面" />
 
     <Button
+        android:id="@+id/btn_night_system"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="start"
+        android:layout_marginStart="48dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="48dp"
+        android:text="跟随系统" />
+
+    <Button
         android:id="@+id/btn_light"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -74,7 +91,7 @@
         android:text="浅色模式" />
 
     <Button
-        android:id="@+id/btn_dark"
+        android:id="@+id/btn_night"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="start"

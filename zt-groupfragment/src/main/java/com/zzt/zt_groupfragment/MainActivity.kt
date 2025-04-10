@@ -16,6 +16,8 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import com.zzt.zt_groupfragment.act.ActTabFragment
 import com.zzt.zt_groupfragment.act.ActTabV2
+import com.zzt.zt_groupfragment.act.ActTabV3
+import com.zzt.zt_groupfragment.act.ActTabV4
 import com.zzt.zt_groupfragment.ui.theme.AppFrame10Theme
 
 class MainActivity : ComponentActivity() {
@@ -53,8 +55,27 @@ fun Greeting(name: String, modifier: Modifier = Modifier) {
         Button(onClick = {
             ActTabV2.start(context)
         }) {
-            Text(text = "分组列表")
+            Text(text = "Tab + Group 做出，可以在分组页面中添加 Fragment ")
         }
+
+        Button(onClick = {
+        }) {
+            Text(text = "Tab + Group 做出，可以在分组页面中添加 Fragment 豆包生成")
+        }
+
+        Button(onClick = {
+            ActTabV3.start(context)
+        }) {
+            Text(text = "Vp2 + Fragment 自定义适配器,适配深色")
+        }
+
+        Button(onClick = {
+            ActTabV4.start(context)
+        }) {
+            Text(text = "TabLayout + Viewpager2 + Fragment 豆包生成")
+        }
+
+
     }
 }
 

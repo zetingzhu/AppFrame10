@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="s1_0">هل نسيت كلمة المرور؟</string>
+
     <string name="s1_1">Log in</string>
     <string name="s1_2">Sign Up</string>
     <string name="s1_3">Email</string>

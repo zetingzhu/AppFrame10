@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceFragmentCompat
 import com.zzt.zt_groupfragment.R
@@ -40,11 +41,21 @@ class SettingsFragment : Fragment() {
             var newFrag = AddFragment.newInstance(" C > ", TimeUtils.date2String(Date()))
             (activity as? ActTabV2)?.addFragment(newFrag)
         }
+        binding?.btnNightSystem?.setOnClickListener {
+            // 设置为跟随系统
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+        }
 
-        binding?.btnLight?.setOnClickListener {  }
+        binding?.btnLight?.setOnClickListener {
+            // 强制禁用深色模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+        }
 
 
-        binding?.btnDark?.setOnClickListener {  }
+        binding?.btnNight?.setOnClickListener {
+            // 强制启用深色模式
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        }
 
     }
 }

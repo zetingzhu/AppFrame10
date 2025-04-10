@@ -13,10 +13,6 @@ import com.google.android.material.tabs.TabLayout
 import com.zzt.zt_groupfragment.FragmentCallback
 import com.zzt.zt_groupfragment.R
 import com.zzt.zt_groupfragment.databinding.ActivityActTabV2Binding
-import com.zzt.zt_groupfragment.frag.FullscreenFragment
-import com.zzt.zt_groupfragment.frag.SettingsFragment
-import com.zzt.zt_groupfragment.frag.LoginFragment
-import com.zzt.zt_groupfragment.frag.ScrollingFragment
 import java.util.Stack
 
 
@@ -39,9 +35,9 @@ class ActTabV2 : AppCompatActivity(), FragmentCallback {
 
     val TAG = "FragmentUtil"
 
-    val TAB_GROUP_A = "tabGroupA"
-    val TAB_GROUP_B = "tabGroupB"
-    val TAB_GROUP_C = "tabGroupC"
+//    val TAB_GROUP_A = "tabGroupA"
+//    val TAB_GROUP_B = "tabGroupB"
+//    val TAB_GROUP_C = "tabGroupC"
 
 
     // 使用栈来管理每个导航组的 Fragment
@@ -51,10 +47,9 @@ class ActTabV2 : AppCompatActivity(), FragmentCallback {
 
 
     var CURRENT_FRAGMENT_TAG: String? = "current_fragment_tag" // 存储的 fragment
-    var currentTabId: String? = TAB_GROUP_A // 默认选中分组
-    var fragmentContainerId = R.id.fl_content // 添加容器 id
+    var currentTabId: String? = FragmentTabGroupManager.TAB_GROUP_A // 默认选中分组
     var binding: ActivityActTabV2Binding? = null
-
+    var tabGroupManager: FragmentTabGroupManager? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -67,30 +62,36 @@ class ActTabV2 : AppCompatActivity(), FragmentCallback {
             insets
         }
 
+        getFragByManager(Log.DEBUG)
+
+        initView()
+
+        tabGroupManager = FragmentTabGroupManager(
+            supportFragmentManager,
+            R.id.fl_content,
+            object : FragmentTabGroupManager.TabGroupCallback {
+                override fun checkTabCall(tabId: String?) {
+                    currentTabId = tabId
+                }
+            })
 
         // 设置初始 Fragment
         if (savedInstanceState == null) {
-            switchTab(TAB_GROUP_A)
+            tabGroupManager?.switchTab(FragmentTabGroupManager.TAB_GROUP_A)
         } else {
+            tabGroupManager?.restoreState(savedInstanceState)
+
             currentTabId = savedInstanceState.getString(CURRENT_FRAGMENT_TAG)
-            // 根据 currentFragmentTag 恢复 Fragment
-            val restoredFragment = supportFragmentManager.findFragmentByTag(currentTabId)
-            if (restoredFragment != null && !restoredFragment.isAdded) {
-                supportFragmentManager.beginTransaction()
-                    .add(fragmentContainerId, restoredFragment, currentTabId)
-                    .commit()
+            currentTabId?.let {
+                showTabCheckId(it)
+                tabGroupManager?.showTabId(it)
             }
         }
+    }
 
-
-        // 处理 Activity 重建时 Fragment 的恢复
-        if (savedInstanceState != null) {
-            restoreFragmentStacks(savedInstanceState)
-            selectCurrentTab()
-        }
-
-
-        initView()
+    override fun onStop() {
+        super.onStop()
+        getFragByManager(Log.WARN)
     }
 
     private fun initView() {
@@ -105,15 +106,15 @@ class ActTabV2 : AppCompatActivity(), FragmentCallback {
                 val position = tab?.position ?: 0
                 when (position) {
                     0 -> {
-                        showTabA()
+                        tabGroupManager?.showTabId(FragmentTabGroupManager.TAB_GROUP_A)
                     }
 
                     1 -> {
-                        showTabB()
+                        tabGroupManager?.showTabId(FragmentTabGroupManager.TAB_GROUP_B)
                     }
 
                     2 -> {
-                        showTabC()
+                        tabGroupManager?.showTabId(FragmentTabGroupManager.TAB_GROUP_C)
                     }
                 }
             }
@@ -126,244 +127,76 @@ class ActTabV2 : AppCompatActivity(), FragmentCallback {
                 val position = tab?.position ?: 0
                 when (position) {
                     0 -> {
-                        showTabA()
+                        tabGroupManager?.showTabId(FragmentTabGroupManager.TAB_GROUP_A)
                     }
 
                     1 -> {
-                        showTabB()
+                        tabGroupManager?.showTabId(FragmentTabGroupManager.TAB_GROUP_B)
                     }
 
                     2 -> {
-                        showTabC()
+                        tabGroupManager?.showTabId(FragmentTabGroupManager.TAB_GROUP_C)
                     }
                 }
             }
         })
     }
 
-    private fun showTabA() {
-        if (TAB_GROUP_A == currentTabId) {
-            popToFirstFragment(groupAFragments)
-        } else {
-            switchTab(TAB_GROUP_A)
-        }
-    }
-
-    private fun showTabB() {
-        if (TAB_GROUP_B == currentTabId) {
-            popToFirstFragment(groupBFragments)
-        } else {
-            switchTab(TAB_GROUP_B)
-        }
-    }
-
-    private fun showTabC() {
-        if (TAB_GROUP_C == currentTabId) {
-            popToFirstFragment(groupCFragments)
-        } else {
-            switchTab(TAB_GROUP_C)
-        }
-    }
-
-
-    private fun switchTab(tabId: String) {
-
-        if (tabId.isNullOrBlank()) return
-
-        val fragmentManager = supportFragmentManager
-        val transaction = fragmentManager.beginTransaction()
-
-        // 隐藏当前显示的 Fragment (如果存在)
-        val topFragByTab = getTopFragmentByTabId(currentTabId)
-        topFragByTab?.let {
-            transaction.hide(it)
-            Log.i(TAG, " hide:" + it)
-        }
-
-        currentTabId = tabId
-
-        // 显示目标 Tab 对应的 Fragment
-        var targetFragment: Fragment? = getTopFragmentByTabId(currentTabId)
-
-        if (targetFragment != null) {
-            transaction.show(targetFragment)
-
-            Log.w(TAG, " show:" + targetFragment)
-        } else {
-            val newFragment = when (tabId) {
-                TAB_GROUP_A -> {
-                    val fragment = LoginFragment.newInstance()
-                    groupAFragments.push(fragment)
-                    fragment
+    private fun showTabCheckId(tabId: String?) {
+        tabId?.let {
+            when (tabId) {
+                FragmentTabGroupManager.TAB_GROUP_A -> {
+                    binding?.tabLayout?.getTabAt(0)?.select()
                 }
 
-                TAB_GROUP_B -> {
-                    val fragment = ScrollingFragment.newInstance()
-                    groupBFragments.push(fragment)
-                    fragment
+                FragmentTabGroupManager.TAB_GROUP_B -> {
+                    binding?.tabLayout?.getTabAt(1)?.select()
                 }
 
-                TAB_GROUP_C -> {
-                    val fragment = SettingsFragment.newInstance()
-                    groupCFragments.push(fragment)
-                    fragment
+                FragmentTabGroupManager.TAB_GROUP_C -> {
+                    binding?.tabLayout?.getTabAt(2)?.select()
                 }
 
-                else -> throw IllegalArgumentException("Unknown tab ID")
-            }
-            transaction.add(fragmentContainerId, newFragment, tabId)
-//            transaction.addToBackStack(currentTabId) // 可选：添加到回退栈
-
-            Log.d(TAG, " add:" + newFragment)
-        }
-        transaction.commit()
-    }
-
-
-    /**
-     *  根据当前Tab 获取顶部 显示的Fragment
-     */
-    fun getTopFragmentByTabId(currentTabId: String?): Fragment? {
-        if (currentTabId?.isNotEmpty() == true) {
-            when (currentTabId) {
-                TAB_GROUP_A -> {
-                    if (groupAFragments.size >= 1) {
-                        return groupAFragments.peek()
-                    }
-                }
-
-                TAB_GROUP_B -> {
-                    if (groupBFragments.size >= 1) {
-                        return groupBFragments.peek()
-                    }
-                }
-
-                TAB_GROUP_C -> {
-                    if (groupCFragments.size >= 1) {
-                        return groupCFragments.peek()
-                    }
+                else -> {
+                    tabGroupManager?.switchTab(FragmentTabGroupManager.TAB_GROUP_A)
                 }
             }
         }
-        return null
     }
 
-
-    /**
-     * 在当前选中的导航组中添加新的 Fragment
-     *
-     * @param fragment Fragment
-     */
-    fun addFragmentToCurrentGroup(addFragment: Fragment?) {
-        addFragment?.let { fragment ->
-            val fragmentManager = supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-            // 隐藏老的 Fragment
-            val topFragByTab = getTopFragmentByTabId(currentTabId)
-            topFragByTab?.let {
-                transaction.hide(it)
-                Log.i(TAG, " hide:" + it)
-            }
-
-            when (currentTabId) {
-                TAB_GROUP_A -> {
-                    groupAFragments.push(fragment)
-                }
-
-                TAB_GROUP_B -> {
-                    groupBFragments.push(fragment)
-                }
-
-                TAB_GROUP_C -> {
-                    groupCFragments.push(fragment)
-                }
-            }
-
-            // 添加新的 Fragment
-            val addTag = fragment.javaClass.name
-            transaction.add(fragmentContainerId, fragment, addTag)
-//            transaction.addToBackStack(currentTabId) // 添加到回退栈
-            transaction.commit()
-
-            Log.d(TAG, " add:" + fragment)
-        }
-    }
-
-    /**
-     * 返回到指定 Fragment 栈的第一个 Fragment
-     *
-     * @param fragmentStack Stack<Fragment>
-     */
-    private fun popToFirstFragment(fragmentStack: Stack<Fragment>?) {
-        fragmentStack?.let { fragmentStack ->
-            if (fragmentStack.size <= 1) return // 已经是第一个或者没有 Fragment
-
-            val fragmentManager = supportFragmentManager
-            val transaction = fragmentManager.beginTransaction()
-
-            // 隐藏当前显示的 Fragment
-            val topFragByTab = getTopFragmentByTabId(currentTabId)
-            topFragByTab?.let {
-                transaction.hide(it)
-                Log.i(TAG, " hide:" + it)
-            }
-
-            // 移除栈顶的 Fragment 直到只剩第一个
-            while (fragmentStack.size > 1) {
-                val fragmentToRemove: Fragment = fragmentStack.pop()
-                val topTag = fragmentToRemove.javaClass.name
-                fragmentManager.findFragmentByTag(topTag)?.let {
-                    transaction.remove(it)
-                }
-            }
-
-            // 显示栈底的第一个 Fragment
-            if (fragmentStack.isNotEmpty()) {
-                val peekFrag = fragmentStack.peek()
-                transaction.show(peekFrag)
-                Log.w(TAG, " show:" + peekFrag)
-            }
-            transaction.commit()
-        }
-    }
 
     // 处理 Activity 重建时恢复 Fragment 栈
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
-        saveFragmentStacks(outState)
+
+        tabGroupManager?.saveState(outState)
+
         outState.putString(CURRENT_FRAGMENT_TAG, currentTabId)
     }
 
-    private fun saveFragmentStacks(outState: Bundle) {
-        outState.putSerializable("groupA", ArrayList(groupAFragments))
-        outState.putSerializable("groupB", ArrayList(groupBFragments))
-        outState.putSerializable("groupC", ArrayList(groupCFragments))
-    }
-
-    private fun restoreFragmentStacks(savedInstanceState: Bundle?) {
-        (savedInstanceState?.getSerializable("groupA") as? ArrayList<Fragment>)?.let {
-            groupAFragments.addAll(
-                it
-            )
-        }
-        (savedInstanceState?.getSerializable("groupB") as? ArrayList<Fragment>)?.let {
-            groupBFragments.addAll(
-                it
-            )
-        }
-        (savedInstanceState?.getSerializable("groupC") as? ArrayList<Fragment>)?.let {
-            groupCFragments.addAll(
-                it
-            )
-        }
-    }
-
-    private fun selectCurrentTab() {
-
-    }
 
     override fun addFragment(fragment: Fragment?) {
-        addFragmentToCurrentGroup(fragment)
+        tabGroupManager?.addFragmentToCurrentGroup(fragment)
+    }
+
+    override fun backFragment() {
+        tabGroupManager?.backFragmentByCurrentGroup()
+    }
+
+    fun getFragByManager(level: Int) {
+        supportFragmentManager.fragments?.forEachIndexed { index, fragment ->
+            val msgStr =
+                "当前内容中的 frag index:" + index + " frag:" + fragment + " isAdd:" + fragment.isAdded + " isDetached: " + fragment.isDetached
+            if (Log.DEBUG == level) {
+                Log.d(
+                    TAG, msgStr
+                )
+            } else if (Log.WARN == level) {
+                Log.w(
+                    TAG, msgStr
+                )
+            }
+        }
     }
 
 }

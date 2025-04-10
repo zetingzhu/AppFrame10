@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_ffffff_or_101010"
     android:orientation="vertical">
 
     <Button
@@ -24,6 +25,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/text_margin"
-            android:text="@string/large_text" />
+            android:text="@string/large_text"
+            android:textColor="@color/color_252C58_or_FFFFFF" />
     </androidx.core.widget.NestedScrollView>
 </LinearLayout>

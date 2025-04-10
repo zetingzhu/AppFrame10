@@ -8,4 +8,6 @@ import androidx.fragment.app.Fragment;
  */
 public interface FragmentCallback {
     void addFragment(Fragment fragment);
+
+    void backFragment();
 }
