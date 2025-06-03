@@ -11,13 +11,17 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
+            <option value="$PROJECT_DIR$/zt-allinstallpackaget" />
             <option value="$PROJECT_DIR$/zt-br-send" />
             <option value="$PROJECT_DIR$/zt-broadcastreceiver" />
             <option value="$PROJECT_DIR$/zt-deviceid" />
             <option value="$PROJECT_DIR$/zt-downtosecondview" />
             <option value="$PROJECT_DIR$/zt-groupfragment" />
+            <option value="$PROJECT_DIR$/zt-java-lib" />
             <option value="$PROJECT_DIR$/zt-loadfiledirimage" />
+            <option value="$PROJECT_DIR$/zt-pushevent" />
             <option value="$PROJECT_DIR$/zt-scroll" />
+            <option value="$PROJECT_DIR$/zt_downtome_view" />
           </set>
         </option>
       </GradleProjectSettings>

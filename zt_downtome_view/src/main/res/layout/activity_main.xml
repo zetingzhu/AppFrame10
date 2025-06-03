@@ -1,0 +1,53 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <com.example.yourapp.CircleCountdownView
+        android:id="@+id/circleCountdownView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"></com.example.yourapp.CircleCountdownView>
+
+    <com.example.yourapp.CircleCountdownView
+        android:id="@+id/vdw_2"
+        android:layout_width="100dp"
+        android:layout_height="100dp"></com.example.yourapp.CircleCountdownView>
+
+    <com.example.yourapp.CircleCountdownView
+        android:id="@+id/vdw_3"
+        android:layout_width="150dp"
+        android:layout_height="150dp"></com.example.yourapp.CircleCountdownView>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="startCountdown"
+        android:text="开始倒计时" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="stopCountdown"
+        android:text="停止倒计时" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="resetCountdown"
+        android:text="重置倒计时" />
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setRight"
+        android:text="设置对" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setError"
+        android:text="设置错" />
+
+</LinearLayout>

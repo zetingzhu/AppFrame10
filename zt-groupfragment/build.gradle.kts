@@ -70,4 +70,8 @@ dependencies {
 
     // 导入自己工具库
     implementation(libs.zzt.v130)
+
+    implementation("com.carrotsearch:java-sizeof:0.0.5")
+//    implementation("com.googlecode.sizeofag:sizeofag:1.0.0")
+    implementation("com.github.fracpete:sizeofag:1.1.0")
 }

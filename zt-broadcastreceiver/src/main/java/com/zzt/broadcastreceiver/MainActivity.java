@@ -8,6 +8,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.Nullable;
@@ -17,12 +18,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyReceiver-act";
     private Button button;
     private MyBroadcastReceiver myBroadcastReceiver;
+    private TextView tv_msg;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,12 +52,15 @@ public class MainActivity extends AppCompatActivity {
                         sendBroadcast("发送内容:" + random.nextInt(100), true);
                         Log.w(TAG, "开始发送 >> ");
                     }
-                }, 5000L);
+                }, 500L);
 
             }
         });
 
 //        registerBroadcastReceiver();
+
+        tv_msg = findViewById(R.id.tv_msg);
+
     }
 
 
@@ -99,6 +108,26 @@ public class MainActivity extends AppCompatActivity {
             intent.putExtra(MyBroadcastReceiver.ACTION_DATA, newData);
             intent.setPackage(getPackageName());
             sendBroadcast(intent, android.Manifest.permission.ACCESS_COARSE_LOCATION);
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        // Do something
+        if (tv_msg != null && event != null) {
+            tv_msg.append("\n> " + event.getSendMsg());
         }
     }
 }

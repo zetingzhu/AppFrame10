@@ -7,6 +7,8 @@ import android.nfc.Tag;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.greenrobot.eventbus.EventBus;
+
 import java.util.Objects;
 
 /**
@@ -26,6 +28,7 @@ public class MyBroadcastReceiver extends BroadcastReceiver {
             if (data != null) {
                 Log.d(TAG, "MyReceiver：" + data);
                 Toast.makeText(context, "MyReceiver：" + data, Toast.LENGTH_SHORT).show();
+                EventBus.getDefault().post(new MessageEvent("MyReceiver：" + data));
             }
         }
     }

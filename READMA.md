@@ -44,7 +44,7 @@ app
 
 
 [app](app)
-里面有各种跑马灯效果
+里面有各种文本跑马灯效果
 
 Toaster 吐司框架
 https://github.com/getActivity/Toaster
@@ -72,3 +72,15 @@ Fragment 分组显示，双击可以返回最下方
 
 [zt-downtosecondview](zt-downtosecondview)
 下拉进入二楼实现
+
+
+[zt-pushevent](zt-pushevent)
+发送埋点
+
+
+[zt-allinstallpackaget](zt-allinstallpackaget)
+获取手机上所有已经安装应用
+
+
+[zt_downtome_view](zt_downtome_view)
+倒计时进度条ui

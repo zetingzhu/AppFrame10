@@ -12,11 +12,15 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import org.greenrobot.eventbus.EventBus;
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MyReceiver.Send-act";
-    private Button button;
+    private Button button, button2;
 
     public static final String ACTION_RECEIVE = "com.RECEIVE";
     public static final String ACTION_DATA = "com.DATA";
@@ -34,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         button = findViewById(R.id.button);
+        button2 = findViewById(R.id.button2);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -61,8 +66,27 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        button2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                loopSend();
+            }
+        });
     }
 
+    public void loopSend() {
+        button.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Random random = new Random();
+                sendBroadcast("发送内容 轮询:" + random.nextInt(1000), true);
+                Log.w(TAG, "开始发送 >轮询> ");
+
+                loopSend();
+            }
+        }, 2000L);
+    }
 
     public void sendBroadcast(String newData, boolean usePermission) {
         if (usePermission) {
@@ -76,5 +100,22 @@ public class MainActivity extends AppCompatActivity {
             intent.setPackage("com.zzt.broadcastreceiver");
             sendBroadcast(intent, android.Manifest.permission.ACCESS_COARSE_LOCATION);
         }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        EventBus.getDefault().register(this);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        EventBus.getDefault().unregister(this);
+    }
+
+    @Subscribe(threadMode = ThreadMode.MAIN)
+    public void onMessageEvent(MessageEvent event) {
+        // Do something
     }
 }
