@@ -3,7 +3,7 @@ package com.zzt.appframe10
 /**
  * @author: zeting
  * @date: 2025/4/7
- *
+ * 跑马灯 3
  */
 import android.animation.ValueAnimator
 import android.content.Context

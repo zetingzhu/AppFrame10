@@ -3,6 +3,7 @@ package com.zzt.appframe10;
 /**
  * @author: zeting
  * @date: 2025/4/7
+ * 跑马灯 5
  */
 
 import android.content.Context;

@@ -18,6 +18,7 @@ import java.lang.ref.WeakReference;
 /**
  * @author: zeting
  * @date: 2022/6/15
+ * 跑马灯 1
  * 自定义可以一直滚动，并且能够调整滚动时间和滚动间隔时间
  * 使用下面几个属性必须设置
  * android:layout_height="wrap_content"
