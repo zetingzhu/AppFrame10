@@ -18,6 +18,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import com.trade.zt_speechrecognizer.audio.MyRecordAct2
+import com.trade.zt_speechrecognizer.audio3.MyAudioV3
 import com.trade.zt_speechrecognizer.speechtotext.MySpeechToText
 import com.trade.zt_speechrecognizer.ui.theme.AppFrame10Theme
 
@@ -64,6 +65,16 @@ fun SpeechRecognizerList(modifier: Modifier = Modifier) {
             }
         ) {
             Text("录音--v2噪")
+        }
+
+        Spacer(modifier = Modifier.height(16.dp))
+
+        Button(
+            onClick = {
+                MyAudioV3.Companion.start(context)
+            }
+        ) {
+            Text("录音--v3")
         }
     }
 }
