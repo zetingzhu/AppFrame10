@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">语音识别</string>
+    <string-array name="language_options">
+        <item>中文（简体）</item>
+        <item>中文（繁體）</item>
+        <item>英语</item>
+        <item>德语</item>
+        <item>法语</item>
+        <item>西班牙语</item>
+        <item>日语</item>
+        <item>韩语</item>
+        <item>俄语</item>
+    </string-array>
+</resources>

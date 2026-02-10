@@ -84,3 +84,12 @@ Fragment 分组显示，双击可以返回最下方
 
 [zt_downtome_view](zt_downtome_view)
 倒计时进度条ui
+
+[zt-appdevicesinfo](zt-appdevicesinfo)
+获取设备基本信息
+
+[zt-smsretriever](zt-smsretriever)
+获取短信验证码
+
+[zt-speechrecognizer](zt-speechrecognizer)
+语言转文字
