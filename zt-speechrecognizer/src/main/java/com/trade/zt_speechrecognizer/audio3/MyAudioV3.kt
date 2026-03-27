@@ -4,30 +4,22 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
-import android.media.AudioFormat
 import android.media.MediaPlayer
 import android.os.Bundle
-import android.os.Environment
-import android.os.Handler
-import android.os.Looper
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.github.squti.androidwaverecorder.WaveRecorder
 import com.trade.zt_speechrecognizer.R
 import java.io.File
-import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
 
 /**
- * 使用 WaveRecorder 库进行录音并存储到 Music 目录
- * 包含完整录音、播放、计时与状态显示功能
+ * 使用 WaveRecorderHelper 工具类进行录音
+ * 包含完整录音、暂停、恢复、播放、计时与状态显示功能
  */
-class MyAudioV3 : AppCompatActivity() {
+class MyAudioV3 : AppCompatActivity(), WaveRecorderHelper.Callback {
 
     // UI 组件
     private lateinit var tvStatus: TextView
@@ -39,24 +31,10 @@ class MyAudioV3 : AppCompatActivity() {
     private lateinit var btnStopAudio: Button
 
     // 核心组件
-    private var waveRecorder: WaveRecorder? = null
+    private lateinit var recorderHelper: WaveRecorderHelper
     private var mediaPlayer: MediaPlayer? = null
     private var currentFilePath: String = ""
-    private var isRecording = false
     private var isPlaying = false
-
-    // 计时器相关
-    private var startTime = 0L
-    private val handler = Handler(Looper.getMainLooper())
-    private val timerRunnable = object : Runnable {
-        override fun run() {
-            if (isRecording) {
-                val millis = System.currentTimeMillis() - startTime
-                updateTimerUI(millis)
-                handler.postDelayed(this, 100) // 0.1秒刷新一次
-            }
-        }
-    }
 
     companion object {
         private const val PERMISSION_REQUEST_CODE = 1001
@@ -72,6 +50,7 @@ class MyAudioV3 : AppCompatActivity() {
         setContentView(R.layout.activity_my_audio_v3)
 
         initViews()
+        initRecorder()
         checkPermissions()
     }
 
@@ -86,7 +65,7 @@ class MyAudioV3 : AppCompatActivity() {
 
         btnStartRecord.setOnClickListener {
             if (checkPermissions()) {
-                startRecording()
+                handleRecordButtonClick()
             }
         }
 
@@ -103,49 +82,23 @@ class MyAudioV3 : AppCompatActivity() {
         }
     }
 
+    private fun initRecorder() {
+        recorderHelper = WaveRecorderHelper(this, this)
+    }
+
     /**
-     * 开始录音
+     * 处理录音按钮点击 (开始/暂停/恢复)
      */
-    private fun startRecording() {
-        if (isRecording) return
-
-        // 1. 生成文件路径 (存放在 App 专属的 Music 目录下，无需额外存储权限)
-        // 注意：WaveRecorder 需要传入具体的文件路径字符串
-        val fileName = "Record_${SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())}.wav"
-        val musicDir = getExternalFilesDir(Environment.DIRECTORY_MUSIC)
-        if (musicDir != null && !musicDir.exists()) {
-            musicDir.mkdirs()
-        }
-        val file = File(musicDir, fileName)
-        currentFilePath = file.absolutePath
-
-        // 2. 初始化 WaveRecorder
-        waveRecorder = WaveRecorder(currentFilePath).apply {
-            noiseSuppressorActive = true // 开启降噪
-            waveConfig.sampleRate = 44100 // 采样率
-            waveConfig.audioEncoding = AudioFormat.ENCODING_PCM_16BIT // 16位 PCM
-            
-            // 可选：监听音量变化用于更新 UI (这里简单打印或不做处理)
-            onAmplitudeListener = { amplitude ->
-                // 可以根据 amplitude 更新波形图
-            }
-        }
-
-        // 3. 开始录制
-        try {
-            waveRecorder?.startRecording()
-            isRecording = true
-            startTime = System.currentTimeMillis()
-            handler.post(timerRunnable)
-
-            // 更新 UI
-            updateUIState(State.RECORDING)
-            tvFilePath.text = "文件路径: $currentFilePath"
-            Toast.makeText(this, "开始录音", Toast.LENGTH_SHORT).show()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-            Toast.makeText(this, "录音启动失败: ${e.message}", Toast.LENGTH_SHORT).show()
+    private fun handleRecordButtonClick() {
+        if (!recorderHelper.isRecording()) {
+            // 开始录音
+            recorderHelper.startRecording()
+        } else if (!recorderHelper.isPaused()) {
+            // 暂停录音
+            recorderHelper.pauseRecording()
+        } else {
+            // 恢复录音
+            recorderHelper.resumeRecording()
         }
     }
 
@@ -153,20 +106,49 @@ class MyAudioV3 : AppCompatActivity() {
      * 停止录音
      */
     private fun stopRecording() {
-        if (!isRecording) return
-
-        try {
-            waveRecorder?.stopRecording()
-            isRecording = false
-            handler.removeCallbacks(timerRunnable)
-
-            updateUIState(State.IDLE_HAS_FILE)
-            Toast.makeText(this, "录音已保存", Toast.LENGTH_SHORT).show()
-
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
+        if (!recorderHelper.isRecording()) return
+        recorderHelper.stopRecording()
     }
+
+    // --- WaveRecorderHelper.Callback 实现 ---
+
+    override fun onTimerUpdate(millis: Long, formattedTime: String) {
+        tvTimer.text = formattedTime
+    }
+
+    override fun onRecordingStart() {
+        updateUIState(State.RECORDING)
+        tvFilePath.text = "正在录音..."
+        Toast.makeText(this, "开始录音", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRecordingStop(filePath: String) {
+        currentFilePath = filePath
+        updateUIState(State.IDLE_HAS_FILE)
+        tvFilePath.text = "文件路径: $currentFilePath"
+        Toast.makeText(this, "录音已保存", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRecordingPause() {
+        updateUIState(State.PAUSED)
+        Toast.makeText(this, "录音已暂停", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onRecordingResume() {
+        updateUIState(State.RECORDING)
+        Toast.makeText(this, "录音已恢复", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun onError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        updateUIState(State.IDLE_NO_FILE)
+    }
+
+    override fun onAmplitudeChange(amplitude: Int) {
+        // 可以更新波形图
+    }
+
+    // --- 播放逻辑 ---
 
     /**
      * 播放录音
@@ -219,12 +201,6 @@ class MyAudioV3 : AppCompatActivity() {
     private fun checkPermissions(): Boolean {
         val permissions = mutableListOf(Manifest.permission.RECORD_AUDIO)
         
-        // Android 12 (S) 及以下如果需要写入外部存储 (非 App 专属目录) 才需要存储权限
-        // 本例使用 getExternalFilesDir 不需要 WRITE_EXTERNAL_STORAGE，但为了保险起见还是检查一下
-        // if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-        //    permissions.add(Manifest.permission.WRITE_EXTERNAL_STORAGE)
-        // }
-
         val notGranted = permissions.filter {
             ContextCompat.checkSelfPermission(this, it) != PackageManager.PERMISSION_GRANTED
         }
@@ -252,22 +228,13 @@ class MyAudioV3 : AppCompatActivity() {
     }
 
     /**
-     * 更新计时器 UI
-     */
-    private fun updateTimerUI(millis: Long) {
-        val seconds = (millis / 1000) % 60
-        val minutes = (millis / (1000 * 60)) % 60
-        val format = String.format(Locale.getDefault(), "%02d:%02d", minutes, seconds)
-        tvTimer.text = format
-    }
-
-    /**
      * UI 状态枚举
      */
     enum class State {
         IDLE_NO_FILE,
         IDLE_HAS_FILE,
         RECORDING,
+        PAUSED,
         PLAYING
     }
 
@@ -278,6 +245,7 @@ class MyAudioV3 : AppCompatActivity() {
         when (state) {
             State.IDLE_NO_FILE -> {
                 tvStatus.text = "状态: 准备就绪"
+                btnStartRecord.text = "开始录音"
                 btnStartRecord.isEnabled = true
                 btnStopRecord.isEnabled = false
                 btnPlayAudio.isEnabled = false
@@ -285,6 +253,7 @@ class MyAudioV3 : AppCompatActivity() {
             }
             State.IDLE_HAS_FILE -> {
                 tvStatus.text = "状态: 录音完成"
+                btnStartRecord.text = "开始录音"
                 btnStartRecord.isEnabled = true
                 btnStopRecord.isEnabled = false
                 btnPlayAudio.isEnabled = true
@@ -292,7 +261,16 @@ class MyAudioV3 : AppCompatActivity() {
             }
             State.RECORDING -> {
                 tvStatus.text = "状态: 正在录音..."
-                btnStartRecord.isEnabled = false
+                btnStartRecord.text = "暂停录音"
+                btnStartRecord.isEnabled = true
+                btnStopRecord.isEnabled = true
+                btnPlayAudio.isEnabled = false
+                btnStopAudio.isEnabled = false
+            }
+            State.PAUSED -> {
+                tvStatus.text = "状态: 已暂停"
+                btnStartRecord.text = "继续录音"
+                btnStartRecord.isEnabled = true
                 btnStopRecord.isEnabled = true
                 btnPlayAudio.isEnabled = false
                 btnStopAudio.isEnabled = false
@@ -309,7 +287,7 @@ class MyAudioV3 : AppCompatActivity() {
 
     override fun onPause() {
         super.onPause()
-        if (isRecording) {
+        if (recorderHelper.isRecording()) {
             stopRecording()
         }
         if (isPlaying) {
