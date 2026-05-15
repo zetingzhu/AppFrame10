@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF6F7FB">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingStart="20dp"
+        android:paddingTop="24dp"
+        android:paddingEnd="20dp"
+        android:paddingBottom="24dp">
+
+        <TextView
+            android:id="@+id/text_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="View 方案高斯模糊"
+            android:textColor="#FF111827"
+            android:textSize="28sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_tips"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:text="当前页面使用 View 方案，通过 ImageView.setRenderEffect() 实时应用高斯模糊。"
+            android:textColor="#FF4B5563"
+            android:textSize="14sp" />
+
+        <TextView
+            android:id="@+id/text_origin_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="原图"
+            android:textColor="#FF111827"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/image_origin"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginTop="12dp"
+            android:background="#FFE5E7EB"
+            android:contentDescription="原图"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/guide_trade_audio_stop_big" />
+
+        <TextView
+            android:id="@+id/text_blurred_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="高斯模糊效果"
+            android:textColor="#FF111827"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <ImageView
+            android:id="@+id/image_blurred"
+            android:layout_width="match_parent"
+            android:layout_height="260dp"
+            android:layout_marginTop="12dp"
+            android:background="#FFE5E7EB"
+            android:contentDescription="高斯模糊效果"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/guide_trade_audio_stop_big" />
+
+        <TextView
+            android:id="@+id/text_radius_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:text="模糊半径"
+            android:textColor="#FF111827"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/text_radius_value"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="18 px"
+            android:textColor="#FF2563EB"
+            android:textSize="14sp" />
+
+        <SeekBar
+            android:id="@+id/seek_bar_blur"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:max="40"
+            android:progress="18" />
+
+    </LinearLayout>
+</ScrollView>
